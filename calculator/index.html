@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calcurator</title>
     <link href="style/main.css" rel="stylesheet">
-    <script defer type="text/javascript" src="js/init.js"></script>
+    <script defer type="text/javascript" src="js/main.js"></script>
 </head>
 <body>
     <div id="calcurator">
@@ -15,8 +15,33 @@
         </div>
         <div class="calBody">
             <div class="left">
+                <p>
+                    <button data-num="7" class="num">7</button> 
+                    <button data-num="8" class="num">8</button> 
+                    <button data-num="9" class="num">9</button>
+                </p>
+                <p>
+                    <button data-num="4" class="num">4</button> 
+                    <button data-num="5" class="num">5</button> 
+                    <button data-num="6" class="num">6</button>
+                </p>
+                <p>
+                    <button data-num="1" class="num">1</button> 
+                    <button data-num="2" class="num">2</button> 
+                    <button data-num="3" class="num">3</button>
+                </p>
+                <p>
+                    <button> </button> 
+                    <button data-num="0" class="num">0</button> 
+                    <button data-num="." class="num">.</button>
+                </p>
             </div>
             <div class="right">
+                <p><button>C</button> <button>()</button></p>
+                <p><button>X</button> <button>%</button></p>
+                <p><button>-</button> <button>+</button></p>
+                <p><button id="operate">=</button></p>
+                
             </div>
         </div>
     </div>
