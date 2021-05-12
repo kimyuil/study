@@ -3,6 +3,8 @@
 // console.log(Array.isArray(Object.values(numButtons)));
 
 const numButtons = document.getElementsByClassName("num");
+const opButtons = document.getElementsByClassName("operator");
+const operateButton = document.getElementById("operate");
 
 var numbers = [];
 var operators = [];
@@ -11,50 +13,51 @@ Object.values(numButtons).forEach((btn) => {
   let val = btn.dataset.num;
   btn.addEventListener("click", () => {
     putNum(val);
+    console.log(numbers)
   });
 });
 
+Object.values(opButtons).forEach((btn) => {
+  let val = btn.dataset.op;
+  btn.addEventListener("click", () => {
+    //val 의 두 경우는 따로 계산. delete와 bracket
+    console.log(val)
+  });
+});
+
+operateButton.addEventListener("click", () => {
+  console.log("최종연산")
+})
+
+
+
 function putNum(num) {
-  //numbers[numbers.length] //로 push 예정
   if (operators.length == numbers.length) {
-    //처음 넣는 과정
     if (num == ".") {
       numbers.push("0.");
     } else {
       numbers.push(String(num));
     }
-  } else if (operators.length > numbers.length) {
+  } else if (operators.length < numbers.length) {
     //숫자 계속 입력중
-
-    //현재까지 정수중인지 소수중인지 구분해주어야 함.
-    let lastChar = String(numbers[numbers.length - 1]).charAt(
-      numbers.length - 1
-    );
-    if (lastChar == ".") {
-      //소수시작
-    } else {
-      //아직까지 정수 입력중
+    
+    let isFloat = String(numbers[numbers.length - 1]).indexOf(".")
+    if (isFloat == -1) {
+      //현재까지 소숫점 없음
       if (numbers[numbers.length - 1] == "0" && num != ".") {
         numbers[numbers.length - 1] = num;
       } else if (num == ".") {
-        //맨 끝이 . 으로 끝나는지 check
         numbers[numbers.length - 1] = String(numbers[numbers.length - 1]) + num;
       } else if (numbers[numbers.length - 1] != "0") {
         numbers[numbers.length - 1] = String(
           Number(numbers[numbers.length - 1]) * 10 + Number(num)
         );
       }
-    }
-
-    if (numbers[numbers.length - 1] == "0" && num != ".") {
-      numbers[numbers.length - 1] = num;
-    } else if (num == ".") {
-      //맨 끝이 . 으로 끝나는지 check
-      numbers[numbers.length - 1] = String(numbers[numbers.length - 1]) + num;
-    } else if (numbers[numbers.length - 1] != "0") {
-      numbers[numbers.length - 1] = String(
-        Number(numbers[numbers.length - 1]) * 10 + Number(num)
-      );
+    } else { // 소수가 입력중
+      if(num == "."){
+        return
+      }
+      numbers[numbers.length - 1] = String(numbers[numbers.length - 1]) + num;      
     }
   }
 }
