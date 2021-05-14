@@ -81,7 +81,7 @@ operateButton.addEventListener("click", () => {
   if (isInt(result)) {
     outputBox[0].innerHTML = result;
   } else {
-    let tmpResult = String(parseFloat(result).toFixed(5))
+    let tmpResult = String(parseFloat(result).toFixed(15))
     let complete 
     while(true){
       if(tmpResult.substring(tmpResult.length-1,tmpResult.length) == '0'){
