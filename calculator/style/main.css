@@ -12,8 +12,15 @@
 .inputLine {
   border: none;
   width: 98%;
-  height: 40px;
-  font-size: 35px;
+  height: 25px;
+  font-size: 20px;
+}
+.output {
+  border: none;
+  width: 98%;
+  height: 25px;
+  font-size: 20px;
+  font-weight: bold;
 }
 .calBody .left {
   display: inline-block;
