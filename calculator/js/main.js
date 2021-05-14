@@ -1,7 +1,3 @@
-// console.log(typeof numButtons);
-// console.log(Object.values(numButtons));
-// console.log(Array.isArray(Object.values(numButtons)));
-
 const numButtons = document.getElementsByClassName("num");
 const opButtons = document.getElementsByClassName("operator");
 const operateButton = document.getElementById("operate");
@@ -21,7 +17,6 @@ Object.values(numButtons).forEach((btn) => {
 Object.values(opButtons).forEach((btn) => {
   let val = btn.dataset.op;
   btn.addEventListener("click", () => {
-    //val 의 두 경우는 따로 계산. delete와 bracket
     putOp(val);
   });
 });
@@ -52,7 +47,6 @@ function putNum2(num) {
     expression.push(num);
   }
 
-  // console.log(expression);
   drawExpression();
 }
 
@@ -67,7 +61,7 @@ function putOp(op) {
   } else {
     expression.push(op);
   }
-  // console.log(expression);
+
   drawExpression();
 }
 
