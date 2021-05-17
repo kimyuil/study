@@ -6,6 +6,8 @@ public class PotoStep extends Step {
         super(name, "촬영");
     }
 
-    
-    
+    @Override
+    public void doWork() {
+        System.out.println(getMyInfo() + "촬영을 합니다");
+    }
 }
