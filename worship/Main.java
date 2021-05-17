@@ -1,12 +1,12 @@
 import java.util.*;
 
-import Persion.*;
+import Person.*;
 import worship.*;
 
 public class Main {
     public static void main(String[] args) {
         // 1. 예배 필요 인원 준비
-        List<Persion> members = new ArrayList<>();
+        List<Person> members = new ArrayList<>();
         members.add(new Preacher("정조은"));
         members.add(new PotoStep("김유일"));
         members.add(new PotoStep("고명진"));

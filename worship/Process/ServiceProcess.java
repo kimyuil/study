@@ -2,9 +2,9 @@ package Process;
 
 import java.util.List;
 
-import Persion.*;
+import Person.*;
 
-public abstract class ServiceProcess {
+public class ServiceProcess implements IDoProcess {
 
     String name;
 
@@ -16,6 +16,8 @@ public abstract class ServiceProcess {
         this.name = name;
     }
 
-    public abstract void doProcess(List<Persion> member);
+    public void doProcess(List<Person> member) {
+
+    }
 
 }

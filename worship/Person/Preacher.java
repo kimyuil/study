@@ -1,8 +1,8 @@
-package Persion;
+package Person;
 
 import java.lang.reflect.Constructor;
 
-public class Preacher extends Persion {
+public class Preacher extends Person implements IPrepareWork, IDoWork, ICleanWork {
 
     public Preacher(String name) {
         super(name, "설교자");

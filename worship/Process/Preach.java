@@ -2,14 +2,14 @@ package Process;
 
 import java.util.List;
 
-import Persion.Persion;
-import Persion.Preacher;
+import Person.Person;
+import Person.Preacher;
 
-public class Preach extends ServiceProcess {
+public class Preach extends ServiceProcess implements IDoProcess {
 
     @Override
-    public void doProcess(List<Persion> member) {
-        for (Persion mem : member) {
+    public void doProcess(List<Person> member) {
+        for (Person mem : member) {
             if (mem instanceof Preacher) {
                 ((Preacher) mem).doWork();
             }

@@ -1,4 +1,4 @@
-package Persion;
+package Person;
 
 public class PotoStep extends Step {
 

@@ -2,47 +2,40 @@ package worship;
 
 import java.util.List;
 
-import Persion.Persion;
+import Person.Person;
 import Process.ServiceProcess;
 
-public abstract class Worship {
-    
-    protected List<Persion> member;
+public class Worship implements IAssignPersion, ICleanWorship, IPrepareWorship, IStartWorship {
+
+    protected List<Person> member;
     protected List<ServiceProcess> process;
     private String name;
-    private String day;    
+    private String day;
 
-    public Worship(){
+    public Worship() {
     }
-    public Worship(String name, String day){
+
+    public Worship(String name, String day) {
         this.setName(name);
         this.setDay(day);
     }
 
-    public abstract boolean assignPersion(List<Persion> member);
-
-    public void progressService(){
+    public void progressService() {
         this.prepareWorship();
-        this.serviceStart();
+        this.startWorship();
         this.cleanWorship();
         this.endWorship();
     }
 
-    protected abstract void prepareWorship();
-    
-    protected abstract void serviceStart();
-    
-    protected abstract void cleanWorship();
-
-    protected void endWorship(){
+    protected void endWorship() {
         this.member = null;
     }
-    
-    public void setName(String name){
-        this.name=name;
+
+    public void setName(String name) {
+        this.name = name;
     }
-    
-    public String getName(){
+
+    public String getName() {
         return this.name;
     }
 
@@ -52,5 +45,22 @@ public abstract class Worship {
 
     private void setDay(String day) {
         this.day = day;
+    }
+
+    @Override
+    public void startWorship() {
+    }
+
+    @Override
+    public void prepareWorship() {
+    }
+
+    @Override
+    public void cleanWorship() {
+    }
+
+    @Override
+    public boolean assignPersion(List<Person> member) {
+        return false;
     }
 }

@@ -2,14 +2,13 @@ package Process;
 
 import java.util.List;
 
-import Persion.Persion;
-import Persion.*;
+import Person.*;
 
-public class PrayBeforeSermon extends ServiceProcess {
+public class PrayBeforeSermon extends ServiceProcess implements IDoProcess {
 
     @Override
-    public void doProcess(List<Persion> member) {
-        for (Persion mem : member) {
+    public void doProcess(List<Person> member) {
+        for (Person mem : member) {
             if (mem instanceof Singer) {
                 ((Singer) mem).endSing();
             }

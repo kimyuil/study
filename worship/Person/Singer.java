@@ -1,6 +1,6 @@
-package Persion;
+package Person;
 
-public class Singer extends Persion {
+public class Singer extends Person implements IPrepareWork, IDoWork, ICleanWork {
 
     public Singer(String name) {
         super(name, "싱어");

@@ -3,10 +3,10 @@ package worship;
 import java.util.ArrayList;
 import java.util.List;
 
-import Persion.*;
+import Person.*;
 import Process.*;
 
-public class SundayService extends Worship {
+public class SundayService extends Worship implements IAssignPersion, ICleanWorship, IPrepareWorship, IStartWorship {
 
     public SundayService() {
         super("주일예배", "일요일");
@@ -18,13 +18,13 @@ public class SundayService extends Worship {
         super.process = process;
     }
 
-    public boolean assignPersion(List<Persion> member) {
+    public boolean assignPersion(List<Person> member) {
         int preacher = 1;
         int potoStep = 2;
         int guideStep = 2;
         System.out.println("할당 인원을 배치합니다.");
 
-        for (Persion m : member) {
+        for (Person m : member) {
             if (m instanceof Preacher) {
                 preacher--;
             } else if (m instanceof PotoStep) {
@@ -50,13 +50,22 @@ public class SundayService extends Worship {
     @Override
     public void prepareWorship() {
         System.out.println("예배를 준비합니다.");
-        for (Persion p : super.member) {
+        for (Person p : super.member) {
             p.prepareWork();
         }
     }
 
     @Override
-    public void serviceStart() {
+    public void cleanWorship() {
+        System.out.println("예배를 정리합니다. 사람들이 마무리 작업을 시작합니다.");
+        for (Person p : super.member) {
+            p.cleanWork();
+        }
+        System.out.println("모두 마무리되었습니다. 집에갑시다.");
+    }
+
+    @Override
+    public void startWorship() {
         System.out.println("------------------");
         System.out.println(this.getDay() + " " + this.getName() + " 시작합니다..");
 
@@ -67,14 +76,6 @@ public class SundayService extends Worship {
 
         System.out.println(this.getDay() + " " + this.getName() + " 끝났습니다.");
         System.out.println("------------------");
-    }
 
-    @Override
-    public void cleanWorship() {
-        System.out.println("예배를 정리합니다. 사람들이 마무리 작업을 시작합니다.");
-        for (Persion p : super.member) {
-            p.cleanWork();
-        }
-        System.out.println("모두 마무리되었습니다. 집에갑시다.");
     }
 }
