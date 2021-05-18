@@ -6,7 +6,7 @@ import java.util.List;
 import Person.*;
 import Process.*;
 
-public class SundayService extends Worship implements IAssignPersion, ICleanWorship, IPrepareWorship, IStartWorship {
+public class SundayService extends Worship {
 
     public SundayService() {
         super("주일예배", "일요일");
@@ -44,7 +44,6 @@ public class SundayService extends Worship implements IAssignPersion, ICleanWors
             return false;
         }
         // 다 통과했다면
-
     }
 
     @Override

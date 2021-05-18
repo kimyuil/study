@@ -12,9 +12,6 @@ public class Worship implements IAssignPersion, ICleanWorship, IPrepareWorship, 
     private String name;
     private String day;
 
-    public Worship() {
-    }
-
     public Worship(String name, String day) {
         this.setName(name);
         this.setDay(day);

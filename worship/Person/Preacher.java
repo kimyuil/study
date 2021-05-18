@@ -2,7 +2,7 @@ package Person;
 
 import java.lang.reflect.Constructor;
 
-public class Preacher extends Person implements IPrepareWork, IDoWork, ICleanWork {
+public class Preacher extends Person {
 
     public Preacher(String name) {
         super(name, "설교자");

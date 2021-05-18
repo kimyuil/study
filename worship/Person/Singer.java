@@ -1,6 +1,6 @@
 package Person;
 
-public class Singer extends Person implements IPrepareWork, IDoWork, ICleanWork {
+public class Singer extends Person {
 
     public Singer(String name) {
         super(name, "싱어");

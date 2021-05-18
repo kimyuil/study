@@ -4,7 +4,7 @@ import java.util.List;
 
 import Person.*;
 
-public class PreparePraise extends ServiceProcess implements IDoProcess {
+public class PreparePraise extends ServiceProcess {
 
     @Override
     public void doProcess(List<Person> member) {

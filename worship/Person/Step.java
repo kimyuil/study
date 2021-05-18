@@ -1,6 +1,6 @@
 package Person;
 
-public class Step extends Person implements IPrepareWork, IDoWork, ICleanWork {
+public class Step extends Person {
 
     public Step(String name, String kind) {
         super(name, kind + " 스텝");

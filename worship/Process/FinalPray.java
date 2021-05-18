@@ -5,7 +5,7 @@ import java.util.List;
 import Person.Person;
 import Person.Preacher;
 
-public class FinalPray extends ServiceProcess implements IDoProcess {
+public class FinalPray extends ServiceProcess {
 
     @Override
     public void doProcess(List<Person> member) {

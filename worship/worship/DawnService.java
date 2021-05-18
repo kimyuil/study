@@ -4,7 +4,7 @@ import java.util.List;
 
 import Person.Person;
 
-public class DawnService extends Worship implements IAssignPersion, ICleanWorship, IPrepareWorship, IStartWorship {
+public class DawnService extends Worship {
 
     public DawnService(String day) {
         super("새벽예배", day);
