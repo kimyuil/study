@@ -1,11 +1,17 @@
 package util;
 
 import java.io.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
+import service.WorshipList;
+
 public class MakeCsv {
-    List<String> header;
-    List<List<String>> content;
+    List<WorshipList> content;
     String fileName;
 
     public String getFileName() {
@@ -16,17 +22,19 @@ public class MakeCsv {
         this.fileName = fileName;
     }
 
-    public void setHeader(List<String> header) {
-        this.header = header;
-    }
+    // public void setHeader(List<String> header) {
+    //     this.header = header;
+    // }
 
-    public void setContent(List<List<String>> content) {
+    public void setContent(List<WorshipList> content) {
         this.content = content;
     }
 
     public void downloadCSV() {
-        if (this.header.size() == 0) {
-            System.out.println("헤더가 설정되어 있지 않습니다");
+
+        // 1. validation
+        if (this.content == null) {
+            System.out.println("입력된 내용이 없습니다.");
             return;
         }
         if (fileName == null || fileName.equals("")) {
@@ -38,29 +46,82 @@ public class MakeCsv {
             }
         }
 
+        // 2. get header by reflection
+        List<String> header = new ArrayList<>();        
+        List<Field> headerList = getAllFields(new LinkedList<Field>(), this.content.get(0).getClass());
+        
+        for(Field h : headerList){
+            h.setAccessible(true); 
+            header.add(h.getName());
+        }
+
+        // 3. file write (try with resource)
         File file = new File(System.getProperty("user.dir") + "\\" + this.fileName);
+        try (BufferedWriter fw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "utf-8"))){
+            
+            fw.write("\uFEFF"); // utf-8 bom
 
-        try {
-            BufferedWriter fw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "euc-kr"));
-            // FileWriter fw = new FileWriter(file);
-
-            for (String head : this.header) {
+            // header
+            fw.write("no"); 
+            fw.write(",");
+            for (String head : header) {
                 fw.write(head);
                 fw.write(",");
-            }
+            }            
             fw.write("\n");
 
-            for (List<String> line : this.content) {
-                for (String item : line) {
-                    fw.write(item);
-                    fw.write(",");
+            // content
+            Integer idx = 1;
+            for (WorshipList item : this.content) {
+
+                fw.write(idx.toString());
+                fw.write(",");
+
+                List<Method> allmethods = getAllMethods(new LinkedList<Method>(), item.getClass());
+                Method[] sortedMethods = new Method[header.size()];
+
+                //find getter methods and set to sortedMethods
+                for(Method m : allmethods){                    
+                    if(m.getName().indexOf("get") == 0 && 
+                    m.getParameterTypes().length == 0 && 
+                    !m.getName().equals("getClass")){
+
+                        sortedMethods[header.indexOf(m.getName().substring(3,4).toLowerCase() + m.getName().substring(4))] = m;
+                    }                    
                 }
-                fw.write("\n");
+                
+                for(Method m : sortedMethods){
+                    fw.write(m.invoke(item).toString());
+                    fw.write(",");
+                }                
+                fw.write("\n");                
+                idx = idx+1;
             }
-            fw.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    // get member list (상속포함)
+    public static List<Field> getAllFields(List<Field> fields, Class<?> type) {
+        fields.addAll(Arrays.asList(type.getDeclaredFields()));
+    
+        if (type.getSuperclass() != null) {
+            getAllFields(fields, type.getSuperclass());
+        }
+    
+        return fields;
+    }
+
+    public static List<Method> getAllMethods(List<Method> methods, Class<?> type) {
+        methods.addAll(Arrays.asList(type.getDeclaredMethods()));
+    
+        if (type.getSuperclass() != null) {
+            getAllMethods(methods, type.getSuperclass());
+        }
+    
+        return methods;
+    }
 }
+
+
