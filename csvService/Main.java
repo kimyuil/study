@@ -19,13 +19,15 @@ public class Main {
         data.add(new SundayService("주해해", "캠퍼스", "", 40, "정인태"));
 
         MakeFile service = new MakeCsv();
-        service.download("주일예배.csv", data);
+        // service.download("주일예배.csv", data);
 
         List<WorshipList> data2 = new ArrayList<>();
         data2.add(new WednesdayService("정별별", "캠퍼스", "", 29));
         data2.add(new WednesdayService("정달달", "캠퍼스", "전도사", 27));
         data2.add(new WednesdayService("정해해", "장년부", "집사", 57));
 
-        service.download("수요예배", data2);
+        // service.download("수요예배", data2);
+        service = new MakeExel();
+        service.download("testttt", data);
     }
 }

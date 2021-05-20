@@ -1,10 +1,20 @@
 package util;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 import service.WorshipList;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class MakeExel implements MakeFile {
 
@@ -16,14 +26,28 @@ public class MakeExel implements MakeFile {
             return;
         }
         if (fileName == null || fileName.equals("")) { // TODO : csv -> xls??
-            fileName = "default.csv";
-            System.out.println("파일 이름이 설정되지 않아 default.csv로 저장됩니다.");
+            fileName = "default.xlsx";
+            System.out.println("파일 이름이 설정되지 않아 default.xlsx로 저장됩니다.");
         } else {
-            if (!(fileName.substring(fileName.length() - 4, fileName.length())).equals(".csv")) {
-                fileName = fileName + ".csv";
+            if (!(fileName.substring(fileName.length() - 5, fileName.length())).equals(".xlsx")) {
+                fileName = fileName + ".xlsx";
             }
         }
-
+        XSSFWorkbook workbook = new XSSFWorkbook(); // 새 엑셀 생성
+        XSSFSheet sheet = workbook.createSheet("시트명"); // 새 시트(Sheet) 생성
+        XSSFRow row = sheet.createRow(0); // 엑셀의 행은 0번부터 시작
+        XSSFCell cell = row.createCell(0); // 행의 셀은 0번부터 시작
+        cell.setCellValue("테스트 데이터"); // 생성한 셀에 데이터 삽입
+        try {
+            FileOutputStream fileoutputstream = new FileOutputStream(fileName);
+            workbook.write(fileoutputstream);
+            fileoutputstream.close();
+            System.out.println("엑셀파일생성성공");
+            workbook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("엑셀파일생성실패");
+        }
     }
 
 }
