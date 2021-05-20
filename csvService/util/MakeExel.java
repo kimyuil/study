@@ -33,15 +33,16 @@ public class MakeExel implements MakeFile {
                 fileName = fileName + ".xlsx";
             }
         }
-        XSSFWorkbook workbook = new XSSFWorkbook(); // 새 엑셀 생성
-        XSSFSheet sheet = workbook.createSheet("시트명"); // 새 시트(Sheet) 생성
-        XSSFRow row = sheet.createRow(0); // 엑셀의 행은 0번부터 시작
-        XSSFCell cell = row.createCell(0); // 행의 셀은 0번부터 시작
-        cell.setCellValue("테스트 데이터"); // 생성한 셀에 데이터 삽입
-        try {
-            FileOutputStream fileoutputstream = new FileOutputStream(fileName);
+
+        try (XSSFWorkbook workbook = new XSSFWorkbook();
+                FileOutputStream fileoutputstream = new FileOutputStream(fileName)) {
+
+            XSSFSheet sheet = workbook.createSheet("시트명"); // 새 시트(Sheet) 생성
+            XSSFRow row = sheet.createRow(0); // 엑셀의 행은 0번부터 시작
+            XSSFCell cell = row.createCell(0); // 행의 셀은 0번부터 시작
+            cell.setCellValue("테스트 데이터"); // 생성한 셀에 데이터 삽입
+
             workbook.write(fileoutputstream);
-            fileoutputstream.close();
             System.out.println("엑셀파일생성성공");
             workbook.close();
         } catch (IOException e) {
