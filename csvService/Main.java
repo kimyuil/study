@@ -19,7 +19,7 @@ public class Main {
         data.add(new SundayService("주해해", "캠퍼스", "", 40, "정인태"));
 
         MakeFile service = new MakeCsv();
-        // service.download("주일예배.csv", data);
+        service.download("test1.csv", data);
 
         List<WorshipList> data2 = new ArrayList<>();
         data2.add(new WednesdayService("정별별", "캠퍼스", "", 29));
@@ -28,6 +28,6 @@ public class Main {
 
         // service.download("수요예배", data2);
         service = new MakeExel();
-        service.download("test", data);
+        service.download("test2", data2);
     }
 }

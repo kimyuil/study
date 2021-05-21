@@ -15,30 +15,15 @@ public class MakeCsv implements MakeFile {
     @Override
     public void download(String fileName, List<WorshipList> content) {
 
-        // 1. validation
-        if (content == null) {
-            System.out.println("입력된 내용이 없습니다.");
+        // validation
+        if (!validateContent(content)) {
             return;
         }
-        if (fileName == null || fileName.equals("")) {
-            fileName = "default.csv";
-            System.out.println("파일 이름이 설정되지 않아 default.csv로 저장됩니다.");
-        } else {
-            if (!(fileName.substring(fileName.length() - 4, fileName.length())).equals(".csv")) {
-                fileName = fileName + ".csv";
-            }
-        }
+        fileName = makeFileName(fileName, "csv");
 
-        // 2. get header by reflection
-        List<String> header = new ArrayList<>();
-        List<Field> headerList = ReflectionUtil.getAllFields(new LinkedList<Field>(), content.get(0).getClass());
+        List<String> header = makeHeader(content.get(0));
 
-        for (Field h : headerList) {
-            h.setAccessible(true);
-            header.add(h.getName());
-        }
-
-        // 3. file write (try with resource)
+        // file write (try with resource)
         File file = new File(System.getProperty("user.dir") + "\\" + fileName);
 
         try (BufferedWriter fw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "utf-8"))) {
@@ -61,25 +46,12 @@ public class MakeCsv implements MakeFile {
                 fw.write(idx.toString());
                 fw.write(",");
 
-                List<Method> allmethods = ReflectionUtil.getAllMethods(new LinkedList<Method>(), item.getClass());
-                Method[] sortedMethods = new Method[header.size()];
-
-                // find getter methods and set to sortedMethods
-                for (Method m : allmethods) {
-                    if (m.getName().indexOf("get") == 0 && m.getParameterTypes().length == 0
-                            && !m.getName().equals("getClass")) {
-
-                        sortedMethods[header
-                                .indexOf(m.getName().substring(3, 4).toLowerCase() + m.getName().substring(4))] = m;
-                    }
-                }
-
-                for (Method m : sortedMethods) {
+                for (Method m : getSortedMethodPerItem(header, item)) {
                     fw.write(m.invoke(item).toString());
                     fw.write(",");
                 }
                 fw.write("\n");
-                idx = idx + 1;
+                idx++;
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -18,33 +18,16 @@ public class MakeExel implements MakeFile {
 
     @Override
     public void download(String fileName, List<WorshipList> content) {
-        // 1. validation
-        if (content == null) {
-            System.out.println("입력된 내용이 없습니다.");
+
+        // validation
+        if (!validateContent(content)) {
             return;
         }
-        if (fileName == null || fileName.equals("")) {
-            fileName = "default.xlsx";
-            System.out.println("파일 이름이 설정되지 않아 default.xlsx로 저장됩니다.");
-        } else {
-            if (fileName.length() > 5
-                    && !(fileName.substring(fileName.length() - 5, fileName.length())).equals(".xlsx")) {
-                fileName = fileName + ".xlsx";
-            } else {
-                fileName = fileName + ".xlsx";
-            }
-        }
+        fileName = makeFileName(fileName, "xlsx");
 
-        // 2. get header by reflection
-        List<String> header = new ArrayList<>();
-        List<Field> headerList = ReflectionUtil.getAllFields(new LinkedList<Field>(), content.get(0).getClass());
+        List<String> header = makeHeader(content.get(0));
 
-        for (Field h : headerList) {
-            h.setAccessible(true);
-            header.add(h.getName());
-        }
-
-        // 3. file write (try with resource)
+        // file write (try with resource)
         try (XSSFWorkbook workbook = new XSSFWorkbook();
                 FileOutputStream fileoutputstream = new FileOutputStream(fileName)) {
 
@@ -70,20 +53,7 @@ public class MakeExel implements MakeFile {
                 rowContent.createCell(idxCell).setCellValue(idxRow.toString());
                 idxCell++;
 
-                List<Method> allmethods = ReflectionUtil.getAllMethods(new LinkedList<Method>(), item.getClass());
-                Method[] sortedMethods = new Method[header.size()];
-
-                // find getter methods and set to sortedMethods
-                for (Method m : allmethods) {
-                    if (m.getName().indexOf("get") == 0 && m.getParameterTypes().length == 0
-                            && !m.getName().equals("getClass")) {
-
-                        sortedMethods[header
-                                .indexOf(m.getName().substring(3, 4).toLowerCase() + m.getName().substring(4))] = m;
-                    }
-                }
-
-                for (Method m : sortedMethods) {
+                for (Method m : getSortedMethodPerItem(header, item)) {
                     rowContent.createCell(idxCell).setCellValue(m.invoke(item).toString());
                     idxCell++;
                 }
