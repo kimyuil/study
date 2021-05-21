@@ -28,6 +28,6 @@ public class Main {
 
         // service.download("수요예배", data2);
         service = new MakeExel();
-        service.download("testttt", data);
+        service.download("test", data);
     }
 }

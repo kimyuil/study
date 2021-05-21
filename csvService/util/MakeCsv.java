@@ -40,6 +40,7 @@ public class MakeCsv implements MakeFile {
 
         // 3. file write (try with resource)
         File file = new File(System.getProperty("user.dir") + "\\" + fileName);
+
         try (BufferedWriter fw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "utf-8"))) {
 
             fw.write("\uFEFF"); // utf-8 bom

@@ -1,16 +1,14 @@
 package util;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.LinkedList;
 
 import service.WorshipList;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -25,29 +23,76 @@ public class MakeExel implements MakeFile {
             System.out.println("입력된 내용이 없습니다.");
             return;
         }
-        if (fileName == null || fileName.equals("")) { // TODO : csv -> xls??
+        if (fileName == null || fileName.equals("")) {
             fileName = "default.xlsx";
             System.out.println("파일 이름이 설정되지 않아 default.xlsx로 저장됩니다.");
         } else {
-            if (!(fileName.substring(fileName.length() - 5, fileName.length())).equals(".xlsx")) {
+            if (fileName.length() > 5
+                    && !(fileName.substring(fileName.length() - 5, fileName.length())).equals(".xlsx")) {
+                fileName = fileName + ".xlsx";
+            } else {
                 fileName = fileName + ".xlsx";
             }
         }
 
+        // 2. get header by reflection
+        List<String> header = new ArrayList<>();
+        List<Field> headerList = ReflectionUtil.getAllFields(new LinkedList<Field>(), content.get(0).getClass());
+
+        for (Field h : headerList) {
+            h.setAccessible(true);
+            header.add(h.getName());
+        }
+
+        // 3. file write (try with resource)
         try (XSSFWorkbook workbook = new XSSFWorkbook();
                 FileOutputStream fileoutputstream = new FileOutputStream(fileName)) {
 
-            XSSFSheet sheet = workbook.createSheet("시트명"); // 새 시트(Sheet) 생성
-            XSSFRow row = sheet.createRow(0); // 엑셀의 행은 0번부터 시작
-            XSSFCell cell = row.createCell(0); // 행의 셀은 0번부터 시작
-            cell.setCellValue("테스트 데이터"); // 생성한 셀에 데이터 삽입
+            XSSFSheet sheet = workbook.createSheet("명단");
+
+            // header
+            Integer idx = 1;
+            XSSFRow rowHeader = sheet.createRow(0);
+            rowHeader.createCell(0).setCellValue("no");
+            for (String head : header) {
+                rowHeader.createCell(idx).setCellValue(head);
+                idx++;
+            }
+
+            // content
+            Integer idxRow = 1;
+            Integer idxCell;
+            XSSFRow rowContent;
+            for (WorshipList item : content) {
+                rowContent = sheet.createRow(idxRow);
+
+                idxCell = 0;
+                rowContent.createCell(idxCell).setCellValue(idxRow.toString());
+                idxCell++;
+
+                List<Method> allmethods = ReflectionUtil.getAllMethods(new LinkedList<Method>(), item.getClass());
+                Method[] sortedMethods = new Method[header.size()];
+
+                // find getter methods and set to sortedMethods
+                for (Method m : allmethods) {
+                    if (m.getName().indexOf("get") == 0 && m.getParameterTypes().length == 0
+                            && !m.getName().equals("getClass")) {
+
+                        sortedMethods[header
+                                .indexOf(m.getName().substring(3, 4).toLowerCase() + m.getName().substring(4))] = m;
+                    }
+                }
+
+                for (Method m : sortedMethods) {
+                    rowContent.createCell(idxCell).setCellValue(m.invoke(item).toString());
+                    idxCell++;
+                }
+                idxRow++;
+            }
 
             workbook.write(fileoutputstream);
-            System.out.println("엑셀파일생성성공");
-            workbook.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("엑셀파일생성실패");
         }
     }
 
