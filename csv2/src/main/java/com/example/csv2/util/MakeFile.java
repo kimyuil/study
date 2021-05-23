@@ -1,17 +1,17 @@
-package util;
+package com.example.csv2.util;
 
+import com.example.csv2.service.WorshipList;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import service.WorshipList;
 
 public interface MakeFile {
 
-    public void download(String fileName, List<WorshipList> content);
+    void download(String fileName, List<WorshipList> content);
 
-    default boolean validateContent(List<WorshipList> content) {
-        return (content == null) ? false : true;
+    default boolean isNotValidateContent(List<WorshipList> content) {
+        return content == null;
     }
 
     default String makeFileName(String fileName, String extension) {
@@ -19,7 +19,7 @@ public interface MakeFile {
             fileName = "default." + extension;
             System.out.println("파일 이름이 설정되지 않아 default.xlsx로 저장됩니다.");
         } else {
-            if (fileName.indexOf("." + extension) == -1) {
+            if (!fileName.contains("." + extension)) {
                 fileName = fileName + ".xlsx";
             }
         }
@@ -28,7 +28,7 @@ public interface MakeFile {
 
     default List<String> makeHeader(WorshipList item) {
         List<String> header = new ArrayList<>();
-        List<Field> headerList = ReflectionUtil.getAllFields(new LinkedList<Field>(), item.getClass());
+        List<Field> headerList = ReflectionUtil.getAllFields(new LinkedList<>(), item.getClass());
 
         for (Field h : headerList) {
             h.setAccessible(true);
@@ -38,7 +38,7 @@ public interface MakeFile {
     }
 
     default Method[] getSortedMethodPerItem(List<String> header, WorshipList item) {
-        List<Method> allmethods = ReflectionUtil.getAllMethods(new LinkedList<Method>(), item.getClass());
+        List<Method> allmethods = ReflectionUtil.getAllMethods(new LinkedList<>(), item.getClass());
         Method[] sortedMethods = new Method[header.size()];
 
         // find getter methods and set to sortedMethods

@@ -1,15 +1,10 @@
-package util;
+package com.example.csv2.util;
 
+import com.example.csv2.service.WorshipList;
 import java.io.*;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.LinkedList;
 
-import service.WorshipList;
-
-import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -20,7 +15,7 @@ public class MakeExel implements MakeFile {
     public void download(String fileName, List<WorshipList> content) {
 
         // validation
-        if (!validateContent(content)) {
+        if (isNotValidateContent(content)) {
             return;
         }
         fileName = makeFileName(fileName, "xlsx");
@@ -34,7 +29,7 @@ public class MakeExel implements MakeFile {
             XSSFSheet sheet = workbook.createSheet("명단");
 
             // header
-            Integer idx = 1;
+            int idx = 1;
             XSSFRow rowHeader = sheet.createRow(0);
             rowHeader.createCell(0).setCellValue("no");
             for (String head : header) {
@@ -43,14 +38,14 @@ public class MakeExel implements MakeFile {
             }
 
             // content
-            Integer idxRow = 1;
-            Integer idxCell;
+            int idxRow = 1;
+            int idxCell;
             XSSFRow rowContent;
             for (WorshipList item : content) {
                 rowContent = sheet.createRow(idxRow);
 
                 idxCell = 0;
-                rowContent.createCell(idxCell).setCellValue(idxRow.toString());
+                rowContent.createCell(idxCell).setCellValue(String.valueOf(idxRow));
                 idxCell++;
 
                 for (Method m : getSortedMethodPerItem(header, item)) {

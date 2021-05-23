@@ -1,4 +1,4 @@
-package service;
+package com.example.csv2.service;
 
 public class SundayService extends WorshipList {
     String preacher;

@@ -1,8 +1,13 @@
-package service;
+package com.example.csv2.service;
+
+import com.example.csv2.CsvColumns;
 
 public class WorshipList {
+
+    @CsvColumns(fieldName = "예배명")
     String serviceName;
     String attendanceName;
+    @CsvColumns
     String depart;
     String rank;
     int age;
