@@ -1,14 +1,11 @@
-package util;
+package com.example.csv2.util;
 
+import com.example.csv2.service.WorshipList;
 import java.io.*;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import service.WorshipList;
 
 public class MakeCsv implements MakeFile {
 
@@ -16,7 +13,7 @@ public class MakeCsv implements MakeFile {
     public void download(String fileName, List<WorshipList> content) {
 
         // validation
-        if (!validateContent(content)) {
+        if (isNotValidateContent(content)) {
             return;
         }
         fileName = makeFileName(fileName, "csv");
@@ -26,7 +23,8 @@ public class MakeCsv implements MakeFile {
         // file write (try with resource)
         File file = new File(System.getProperty("user.dir") + "\\" + fileName);
 
-        try (BufferedWriter fw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "utf-8"))) {
+        try (BufferedWriter fw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file),
+            StandardCharsets.UTF_8))) {
 
             fw.write("\uFEFF"); // utf-8 bom
 
@@ -40,10 +38,10 @@ public class MakeCsv implements MakeFile {
             fw.write("\n");
 
             // content
-            Integer idx = 1;
+            int idx = 1;
             for (WorshipList item : content) {
 
-                fw.write(idx.toString());
+                fw.write(Integer.toString(idx));
                 fw.write(",");
 
                 for (Method m : getSortedMethodPerItem(header, item)) {
