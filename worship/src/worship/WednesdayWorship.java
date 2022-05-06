@@ -24,30 +24,34 @@ public class WednesdayWorship implements Worship{
     BibleMovie bibleMovie;
     List<SermonMovie> sermonMovies;
 
-    public void preparePerson(
-            List<Singer> singer,
-            LeadSinger leadSinger,
-            Preacher preacher,
-            Moderator moderator,
-            List<Mike> mikes){
+    public static WednesdayWorship of(List<Singer> singer,
+                                      LeadSinger leadSinger,
+                                      Preacher preacher,
+                                      Moderator moderator,
+                                      List<Mike> mikes,
+                                      List<SongMovie> prepareWorship,
+                                      BibleMovie bibleMovie,
+                                      List<SermonMovie> sermonMovies){
 
-        this.singer = singer;
-        this.leadSinger = leadSinger;
-        this.preacher = preacher;
-        this.moderator = moderator;
+        WednesdayWorship data = new WednesdayWorship();
+
+        data.singer = singer;
+        data.leadSinger = leadSinger;
+        data.preacher = preacher;
+        data.moderator = moderator;
 
         List<Speacher> speachers = new ArrayList<>();
-        speachers.add(this.preacher);
-        speachers.add(this.moderator);
+        speachers.add(data.preacher);
+        speachers.add(data.moderator);
 
         int singerIndex = 0;
         int speacherIndex = 0;
         for(var mike : mikes){
 
             if(mike instanceof SpreadMike){
-                leadSinger.setMike(mike);
+                data.leadSinger.setMike(mike);
             }else if(mike instanceof SmallMike){
-                singer.get(singerIndex).setMike(mike);
+                data.singer.get(singerIndex).setMike(mike);
                 singerIndex ++;
             }else if(mike instanceof CleanMike){
                 speachers.get(speacherIndex).setMike(mike);
@@ -55,16 +59,11 @@ public class WednesdayWorship implements Worship{
             }
         }
 
-    }
+        data.songs = prepareWorship;
+        data.bibleMovie=bibleMovie;
+        data.sermonMovies=sermonMovies;
 
-    public void prepareSetting(List<SongMovie> prepareWorship,
-                               BibleMovie bibleMovie,
-                               List<SermonMovie> sermonMovies){
-
-        this.songs = prepareWorship;
-        this.bibleMovie=bibleMovie;
-        this.sermonMovies=sermonMovies;
-
+        return data;
     }
 
     @Override

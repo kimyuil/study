@@ -28,33 +28,40 @@ public class SundayWorship implements Worship{
     SpecialSongMovie specialSongMovie;
     WholeSongMovie wholeSongMovie;
 
-    public void preparePerson(
-            List<Singer> singer,
-            LeadSinger leadSinger,
-            Preacher preacher,
-            Moderator moderator,
-            RepresentativePrayer prayer,
-            List<Mike> mikes){
-
-        this.singer = singer;
-        this.leadSinger = leadSinger;
-        this.preacher = preacher;
-        this.moderator = moderator;
-        this.prayer = prayer;
+    public static SundayWorship of(List<Singer> singer,
+                                   LeadSinger leadSinger,
+                                   Preacher preacher,
+                                   Moderator moderator,
+                                   RepresentativePrayer prayer,
+                                   List<Mike> mikes,
+                                   List<SongMovie> prepareWorship,
+                                   BibleMovie bibleMovie,
+                                   BlessingMovie blessingMovie,
+                                   OfferingMovie offeringMovie,
+                                   PromiseMovie promiseMovie,
+                                   List<SermonMovie> sermonMovies,
+                                   SpecialSongMovie specialSongMovie,
+                                   WholeSongMovie wholeSongMovie){
+        SundayWorship data = new SundayWorship();
+        data.singer = singer;
+        data.leadSinger = leadSinger;
+        data.preacher = preacher;
+        data.moderator = moderator;
+        data.prayer = prayer;
 
         List<Speacher> speachers = new ArrayList<>();
-        speachers.add(this.prayer);
-        speachers.add(this.preacher);
-        speachers.add(this.moderator);
+        speachers.add(data.prayer);
+        speachers.add(data.preacher);
+        speachers.add(data.moderator);
 
         int singerIndex = 0;
         int speacherIndex = 0;
         for(var mike : mikes){
 
             if(mike instanceof SpreadMike){
-                leadSinger.setMike(mike);
+                data.leadSinger.setMike(mike);
             }else if(mike instanceof SmallMike){
-                singer.get(singerIndex).setMike(mike);
+                data.singer.get(singerIndex).setMike(mike);
                 singerIndex ++;
             }else if(mike instanceof CleanMike){
                 speachers.get(speacherIndex).setMike(mike);
@@ -62,28 +69,17 @@ public class SundayWorship implements Worship{
             }
         }
 
+        data.songs = prepareWorship;
+        data.bibleMovie=bibleMovie;
+        data.blessingMovie=blessingMovie;
+        data.offeringMovie=offeringMovie;
+        data.promiseMovie=promiseMovie;
+        data.sermonMovies=sermonMovies;
+        data.specialSongMovie=specialSongMovie;
+        data.wholeSongMovie=wholeSongMovie;
+
+        return data;
     }
-
-    public void prepareSetting(List<SongMovie> prepareWorship,
-                               BibleMovie bibleMovie,
-                               BlessingMovie blessingMovie,
-                               OfferingMovie offeringMovie,
-                               PromiseMovie promiseMovie,
-                               List<SermonMovie> sermonMovies,
-                               SpecialSongMovie specialSongMovie,
-                               WholeSongMovie wholeSongMovie){
-
-        this.songs = prepareWorship;
-        this.bibleMovie=bibleMovie;
-        this.blessingMovie=blessingMovie;
-        this.offeringMovie=offeringMovie;
-        this.promiseMovie=promiseMovie;
-        this.sermonMovies=sermonMovies;
-        this.specialSongMovie=specialSongMovie;
-        this.wholeSongMovie=wholeSongMovie;
-
-    }
-
 
     @Override
     public void 예배진행() {

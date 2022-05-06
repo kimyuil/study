@@ -13,7 +13,7 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
 
-        SundayWorship 주일예배 = new SundayWorship();
+
 
         List<Singer> singers = new ArrayList<>();
         singers.add(new Singer("싱어1"));
@@ -70,15 +70,13 @@ public class Main {
             sermonMovies.add(s.getSermonMovie());
         }
 
-        주일예배.preparePerson(singers, leadSinger, preacher, moderator, player, mikes);
-        주일예배.prepareSetting(songs, bibleMovie, blessingMovie, offeringMovie, promiseMovie, sermonMovies, specialSongMovie, wholeSongMovie);
+        SundayWorship 주일예배 = SundayWorship.of(singers, leadSinger, preacher, moderator, player, mikes,
+            songs, bibleMovie, blessingMovie, offeringMovie, promiseMovie, sermonMovies, specialSongMovie, wholeSongMovie);
 
         주일예배.예배진행();
 
 
 
-
-        WednesdayWorship wednesdayWorship = new WednesdayWorship();
 
         List<Singer> singers2 = new ArrayList<>();
         singers2.add(new Singer("w싱어1"));
@@ -118,14 +116,14 @@ public class Main {
             sermonMovies2.add(s.getSermonMovie());
         }
 
-        wednesdayWorship.preparePerson(singers2, leadSinger2, preacher2, moderator2,mikes2);
-        wednesdayWorship.prepareSetting(songs2, bibleMovie2, sermonMovies2);
+        WednesdayWorship wednesdayWorship = WednesdayWorship.of(singers2, leadSinger2, preacher2, moderator2,mikes2
+            ,songs2, bibleMovie2, sermonMovies2);
         wednesdayWorship.예배진행();
 
 
 
 
-        DawnWorship dawnWorship = new DawnWorship("목요일");
+
 
         List<PraiseLead> praisesD = new ArrayList<>();
         praisesW.add(new PraiseLead(new SongMovie("주님 그 사랑으로 나를 기르시고 큰 기대를 하셨죠 이젠 실망보다 기쁨되고 싶어 " , "하얀꽃 music"),"찬양하심으로 새벽예배의 문을 열겠습니다."));
@@ -136,16 +134,14 @@ public class Main {
         mikes3.add(new SpreadMike());
         mikes3.add(new CleanMike());
 
-        dawnWorship.preparePerson(new ArrayList<>(), leadSinger3, preacher2, mikes3);
+
 
         List<SongMovie> songs3 = new ArrayList<>();
         for(var s : leadSinger3.getSongsWithMent()){
             songs3.add(s.getSong());
         }
 
-
-        dawnWorship.prepareSetting(songs3);
-
+        DawnWorship dawnWorship = DawnWorship.of("목요일", new ArrayList<>(), leadSinger3, preacher2, mikes3, songs3);
         dawnWorship.예배진행();
 
     }

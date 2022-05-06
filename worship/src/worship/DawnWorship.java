@@ -24,28 +24,29 @@ public class DawnWorship implements Worship{
 
     List<SongMovie> songs;
 
-    public void preparePerson(
-            List<Singer> singer,
-            LeadSinger leadSinger,
-            Preacher preacher,
-            List<Mike> mikes){
-
-        this.singer = singer;
-        this.leadSinger = leadSinger;
-        this.preacher = preacher;
+    public static DawnWorship of(String 요일,
+                                 List<Singer> singer,
+                                 LeadSinger leadSinger,
+                                 Preacher preacher,
+                                 List<Mike> mikes,
+                                 List<SongMovie> prepareWorship){
+        DawnWorship data = new DawnWorship(요일);
+        data.singer = singer;
+        data.leadSinger = leadSinger;
+        data.preacher = preacher;
 
 
         List<Speacher> speachers = new ArrayList<>();
-        speachers.add(this.preacher);
+        speachers.add(data.preacher);
 
         int singerIndex = 0;
         int speacherIndex = 0;
         for(var mike : mikes){
 
             if(mike instanceof SpreadMike){
-                leadSinger.setMike(mike);
+                data.leadSinger.setMike(mike);
             }else if(mike instanceof SmallMike){
-                singer.get(singerIndex).setMike(mike);
+                data.singer.get(singerIndex).setMike(mike);
                 singerIndex ++;
             }else if(mike instanceof CleanMike){
                 speachers.get(speacherIndex).setMike(mike);
@@ -53,12 +54,8 @@ public class DawnWorship implements Worship{
             }
         }
 
-    }
-
-    public void prepareSetting(List<SongMovie> prepareWorship){
-
-        this.songs = prepareWorship;
-
+        data.songs = prepareWorship;
+        return data;
     }
 
     @Override
