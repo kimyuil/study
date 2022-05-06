@@ -7,14 +7,17 @@ import faith.말씀;
 import faith.찬양;
 import god.성령님;
 import god.하나님;
-import mission.*;
+import person.mission.*;
 
 import java.util.List;
 
-public class 선생님 extends Person implements I메시야 {
+public class 메시야 extends Person implements I메시야 {
 
-  public 선생님(String name, IChurch 교회, List<IDept> 부서들) {
+  public 메시야(String name, IChurch 교회, List<IDept> 부서들) {
     super(name, 교회, 부서들);
+  }
+  public static 메시야 of(String name, IChurch 교회, List<IDept> 부서들){
+    return new 메시야(name, 교회, 부서들);
   }
 
   @Override
@@ -72,6 +75,9 @@ public class 선생님 extends Person implements I메시야 {
   @Override
   public void 죄를회개시키다(기도 기도, Person person) {
     System.out.println(이름 + " : " + person.이름 +"의 죄를 회개시켜주십니다. 기도 : "+ 기도.get기도내용());
+    if(person instanceof 평신도){
+      ((평신도) person).신앙정도 += 10;
+    }
   }
 
 

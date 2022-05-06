@@ -3,16 +3,20 @@ package person;
 import church.IChurch;
 import dept.IDept;
 import faith.말씀;
-import mission.I지도자;
-import mission.I평신도;
+import person.mission.I지도자;
+import person.mission.I평신도;
 
 import java.util.List;
 
-public class 김유일 extends Person implements I지도자 {
+public class 지도자 extends Person implements I지도자 {
 
 
-  public 김유일(String name, IChurch 교회, List<IDept> 부서들) {
+  public 지도자(String name, IChurch 교회, List<IDept> 부서들) {
     super(name, 교회, 부서들);
+  }
+
+  public static 지도자 of(String name, IChurch 교회, List<IDept> 부서들){
+    return new 지도자(name, 교회, 부서들);
   }
 
   @Override

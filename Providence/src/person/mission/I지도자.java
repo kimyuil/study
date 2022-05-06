@@ -1,4 +1,4 @@
-package mission;
+package person.mission;
 
 import faith.말씀;
 

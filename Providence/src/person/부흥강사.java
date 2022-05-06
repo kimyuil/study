@@ -3,18 +3,22 @@ package person;
 import church.IChurch;
 import dept.IDept;
 import faith.말씀;
-import mission.I목회자;
-import mission.I부흥강사;
-import mission.I지도자;
-import mission.I평신도;
+import person.mission.I목회자;
+import person.mission.I부흥강사;
+import person.mission.I지도자;
+import person.mission.I평신도;
 
 import java.util.List;
 
-public class 정조은 extends Person implements I부흥강사 {
+public class 부흥강사 extends Person implements I부흥강사 {
 
 
-  public 정조은(String name, IChurch 교회, List<IDept> 부서들) {
+  public 부흥강사(String name, IChurch 교회, List<IDept> 부서들) {
     super(name, 교회, 부서들);
+  }
+
+  public static 부흥강사 of(String name, IChurch 교회, List<IDept> 부서들){
+    return new 부흥강사(name, 교회, 부서들);
   }
 
   @Override
