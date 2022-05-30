@@ -9,23 +9,25 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ExcelService {
 
-  public void download(String fileName, List<Fish> content) {
+  public void download(String fileName, List<Fish> contents) {
 
     // validation
-    if (content == null) {
+    if (contents == null) {
       return;
     }
 
     fileName = fileName + ".xlsx";
 
-    // todo 리플렉션으로 리팩토링
-    List<String> header = List.of("최소ph","최대ph","길이","색깔","요구포만도","현재포만도","질병여부");
+    List<String> headers = ReflectionUtil.getHeaders(contents.get(0).getClass());
 
     // file write (try with resource)
     try (XSSFWorkbook workbook = new XSSFWorkbook();
@@ -37,7 +39,7 @@ public class ExcelService {
       int idx = 1;
       XSSFRow rowHeader = sheet.createRow(0);
       rowHeader.createCell(0).setCellValue("no");
-      for (String head : header) {
+      for (String head : headers) {
         rowHeader.createCell(idx).setCellValue(head);
         idx++;
       }
@@ -46,28 +48,17 @@ public class ExcelService {
       int idxRow = 1;
       int idxCell;
       XSSFRow rowContent;
-      for (var item : content) {
+      for (var item : contents) {
         rowContent = sheet.createRow(idxRow);
 
         idxCell = 0;
         rowContent.createCell(idxCell).setCellValue(String.valueOf(idxRow));
         idxCell++;
 
-        // todo 리플랙션 리팩토링
-        rowContent.createCell(idxCell).setCellValue(item.get최소ph());
-        idxCell++;
-        rowContent.createCell(idxCell).setCellValue(item.get최대ph());
-        idxCell++;
-        rowContent.createCell(idxCell).setCellValue(item.get길이());
-        idxCell++;
-        rowContent.createCell(idxCell).setCellValue(item.get색깔());
-        idxCell++;
-        rowContent.createCell(idxCell).setCellValue(item.get요구포만도());
-        idxCell++;
-        rowContent.createCell(idxCell).setCellValue(item.get현재포만도());
-        idxCell++;
-        rowContent.createCell(idxCell).setCellValue(item.get질병여부());
-
+        for (Method m : ReflectionUtil.getSortedMethodPerItem(headers, item)) {
+          rowContent.createCell(idxCell).setCellValue(m.invoke(item).toString());
+          idxCell++;
+        }
 
         idxRow++;
       }
