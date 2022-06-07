@@ -1,6 +1,7 @@
 package com.example.excel.util;
 
 import com.example.excel.data.Fish;
+import com.example.excel.data.ValueOrder;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class CsvService {
+public class CsvService implements FileService {
 
   public <T> void download(String fileName, List<T> contents) {
 
@@ -24,7 +25,7 @@ public class CsvService {
 
     fileName = fileName + ".csv";
 
-    List<String> headers = ReflectionUtil.getHeaders(contents.get(0).getClass());
+    List<ValueOrder> headers = getHeaders(contents.get(0).getClass());
 
     // file write (try with resource)
     File file = new File(System.getProperty("user.dir") + File.separator + fileName);
@@ -37,8 +38,8 @@ public class CsvService {
       // header
       fw.write("no");
       fw.write(",");
-      for (String head : headers) {
-        fw.write(head);
+      for (var head : headers) {
+        fw.write(head.getFieldName());
         fw.write(",");
       }
       fw.write("\n");
@@ -49,7 +50,7 @@ public class CsvService {
 
         fw.write(Integer.toString(idx));
         fw.write(",");
-        for (Method m : ReflectionUtil.getSortedMethodPerItem(headers, item)) {
+        for (Method m : getSortedMethodPerItem(headers, item)) {
           fw.write(m.invoke(item).toString());
           fw.write(",");
         }

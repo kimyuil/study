@@ -1,6 +1,7 @@
 package com.example.excel.util;
 
 import com.example.excel.data.Fish;
+import com.example.excel.data.ValueOrder;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -16,9 +17,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ExcelService {
+public class ExcelService implements FileService {
 
-  public void download(String fileName, List<Fish> contents) {
+  public <T> void download(String fileName, List<T> contents) {
 
     // validation
     if (contents == null) {
@@ -27,7 +28,7 @@ public class ExcelService {
 
     fileName = fileName + ".xlsx";
 
-    List<String> headers = ReflectionUtil.getHeaders(contents.get(0).getClass());
+    List<ValueOrder> headers = getHeaders(contents.get(0).getClass());
 
     // file write (try with resource)
     try (XSSFWorkbook workbook = new XSSFWorkbook();
@@ -39,8 +40,8 @@ public class ExcelService {
       int idx = 1;
       XSSFRow rowHeader = sheet.createRow(0);
       rowHeader.createCell(0).setCellValue("no");
-      for (String head : headers) {
-        rowHeader.createCell(idx).setCellValue(head);
+      for (var head : headers) {
+        rowHeader.createCell(idx).setCellValue(head.getDisplayName());
         idx++;
       }
 
@@ -55,7 +56,7 @@ public class ExcelService {
         rowContent.createCell(idxCell).setCellValue(String.valueOf(idxRow));
         idxCell++;
 
-        for (Method m : ReflectionUtil.getSortedMethodPerItem(headers, item)) {
+        for (Method m : getSortedMethodPerItem(headers, item)) {
           rowContent.createCell(idxCell).setCellValue(m.invoke(item).toString());
           idxCell++;
         }

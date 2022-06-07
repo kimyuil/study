@@ -28,29 +28,6 @@ public class ReflectionUtil {
     return methods;
   }
 
-  public static <T> Method[] getSortedMethodPerItem(List<String> header, T item) {
-    List<Method> allMethods = ReflectionUtil.getAllMethods(new LinkedList<>(), item.getClass());
-    Method[] sortedMethods = new Method[header.size()];
 
-    // get메소드를 찾고, sortedMethods에 세팅
-    for (Method m : allMethods) {
-      if (m.getName().indexOf("get") == 0 && m.getParameterTypes().length == 0
-          && !m.getName().equals("getClass")) {
-
-        sortedMethods[header.indexOf(m.getName().substring(3, 4).toLowerCase() + m.getName().substring(4))] = m;
-      }
-    }
-    return sortedMethods;
-  }
-
-  public static List<String> getHeaders(Class<?> type){
-    List<Field> fields = ReflectionUtil.getAllFields(new LinkedList<>(), type);
-    List<String> headers = new ArrayList<>();
-    for (var f : fields) {
-      f.setAccessible(true);
-      headers.add(f.getName());
-    }
-    return headers;
-  }
 
 }
